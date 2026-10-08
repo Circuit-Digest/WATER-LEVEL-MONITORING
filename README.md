@@ -45,39 +45,3 @@ The contactless sensor features a 4-pin header:
 ## 🔌 Wiring Diagram
 
 ### 1. Transmitter Node (TX - Tank Side)
-
-```text
-Contactless Sensor        ESP32 (Transmitter)
-+------------------+      +-------------------+
-|       VIN        | ---> |        5V         |
-|       GND        | ---> |        GND        |
-|       OUT        | ---> |      GPIO 13      |
-|  MODE (Floating) | ---> |    (Unconnected)  |
-+------------------+      +-------------------+
-
-### 2. Receiver Node (RX - Room Side)
-
-Connect the Receiver ESP32 to your PC via USB, or power it with a 5V adapter. It receives wireless packets via ESP-NOW and outputs status updates over Serial Monitor or Web UI.
-
----
-
-## 🚀 Getting Started
-
-### Prerequisites
-
-1. Install [Arduino IDE](https://www.arduino.cc/en/software).
-2. Add ESP32 board support in Arduino IDE (`Tools > Board > Boards Manager` and install **esp32** by *Espressif Systems*).
-
-### Step 1: Find the Receiver MAC Address
-
-1. Upload the following code to your **Receiver ESP32**:
-   ```cpp
-   #include "WiFi.h"
-   void setup() {
-     Serial.begin(115200);
-     WiFi.mode(WIFI_MODE_STA);
-     Serial.println(WiFi.macAddress());
-   }
-   void loop() {}
-
-
