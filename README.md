@@ -45,3 +45,52 @@ The contactless sensor features a 4-pin header:
 ## 🔌 Wiring Diagram
 
 ### 1. Transmitter Node (TX - Tank Side)
+
+
+
+
+### Receiver Code (`Receiver.ino`)
+
+The Receiver ESP32 resides inside the house. It listens for incoming ESP-NOW radio packets from the Transmitter and processes the water level status.
+
+```cpp
+#include <esp_now.h>
+#include <WiFi.h>
+
+// Matching data structure with Transmitter
+typedef struct struct_message {
+  bool liquidDetected;
+} struct_message;
+
+struct_message incomingData;
+
+// ESP-NOW Receive Callback (ESP32 Core v3.x compliant)
+void OnDataRecv(const esp_now_recv_info *info, const uint8_t *data, int len) {
+  memcpy(&incomingData, data, sizeof(incomingData));
+
+  if (incomingData.liquidDetected) {
+    Serial.println("Received: Liquid Detected 💧");
+  } else {
+    Serial.println("Received: No Liquid Available ❌");
+  }
+}
+
+void setup() {
+  Serial.begin(115200);
+
+  // Set ESP32 to Station mode
+  WiFi.mode(WIFI_STA);
+
+  // Initialize ESP-NOW
+  if (esp_now_init() != ESP_OK) {
+    Serial.println("Error initializing ESP-NOW");
+    return;
+  }
+
+  // Register receive callback function
+  esp_now_register_recv_cb(OnDataRecv);
+}
+
+void loop() {
+  // Asynchronous execution: callback handles incoming data automatically
+}
