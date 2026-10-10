@@ -43,7 +43,7 @@ void setup() {
 }
 
 void loop() {
-  bool currentState = digitalRead(SensePin);
+  bool currentState = !digitalRead(SensePin);
   myData.liquidDetected = currentState;
 
   if (currentState) {
